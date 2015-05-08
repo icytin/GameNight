@@ -1,0 +1,18 @@
+<section data-ng-controller="NightCreateController" data-ng-init="findOne()">
+  <form name="nightForm" class="form-horizontal col-md-6" role="form" data-ng-submit="update(nightForm.$valid)" novalidate>
+    <div class="form-group" ng-class="{ 'has-error' : submitted && nightForm.password.$invalid }">
+      <label mean-token="'edit-password'" for="password" class="col-md-3 control-label">Password</label>
+      <div class="col-md-9">
+        <input name="password" type="text" class="form-control" data-ng-model="night.password" id="password" placeholder="Password" required tabindex="1">
+        <div ng-show="submitted && nightForm.password.$invalid" class="help-block">
+          <p ng-show="nightForm.password.$error.required">Password is required</p>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-offset-3 col-md-9">
+        <button mean-token="'edit-submit'" type="submit" class="btn btn-success" tabindex="2">Submit</button>
+      </div>
+    </div>
+  </form>
+</section>

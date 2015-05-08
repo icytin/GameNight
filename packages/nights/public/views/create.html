@@ -1,0 +1,188 @@
+<section data-ng-controller="NightCreateController" data-ng-init="findOne();">
+
+  <h2>Game Night</h2>
+  <span>Created {{night.created | date:'yyyy-MM-dd HH:mm'}}</span>
+  <span id="gameNightActionsBeforePasswordExist" data-ng-if="!night.password">
+	<a class="btn" href="/#!/nights/{{night._id}}/edit">
+	  <i class="glyphicon glyphicon-edit"></i> Specify admin password
+	</a>
+  </span>
+  <!-- Actions -->
+
+  
+  <!-- Belongings to the night. Only after admin password is set -->
+  <section data-ng-if="night.password">
+  
+	<!-- Games section -->
+	<section class="padding-row-x2" data-ng-controller="GamesController">
+		<h3>Games</h3>
+		<div data-ng-show="night.games.length == 0">
+			<span>There are no games registered for this game night.</span>
+		</div>
+		
+		<table class="table table-condensed">
+			<tr style="font-weight: bold;">
+			  <td style="width:20%">Title</td>
+			  <td style="width:20%">Type</td>
+			  <td style="width:15%">Handicap</td>
+			  <td style="width:15%">HandicapType</td>
+			  <td style="width:15%">Type Addings</td>
+			  <td style="width:15%"></td>
+			</tr>
+			<tr ng-repeat="game in night.games">
+			  <td>
+				<!-- editable username (text with validation) -->
+				<span editable-text="game.title" e-name="title" e-form="rowform" onbeforesave="checkTitle($data, user.id)" e-required>
+				  {{ game.title || 'empty' }}
+				</span>
+			  </td>
+			  <td>
+				<!-- editable type (select-local) -->
+				<span editable-select="game.type" e-name="type" e-form="rowform" e-ng-options="s.value as s.text for s in gameTypes">
+				  {{ showType(game) }}
+				</span>
+			  </td>
+			  <td>
+				<!-- editable handicap (select-remote) -->
+				<span editable-select="game.handicap" e-name="handicap" e-form="rowform" e-ng-change="handicapChange(this, game)" e-ng-options="g.value as g.text for g in handicap">
+				  {{ showHandicap(game) }}
+				</span>
+			  </td>
+			  
+			  <!-- editable handicapTypes (select-remote) -->
+			  <td data-ng-if="game.handicap">
+				<span editable-select="game.handicapType" e-name="handicapType" e-form="rowform" e-ng-options="s.value as s.text for s in handicapTypes">
+				  {{ showHandicapType(game) }}
+				</span>
+			  </td>
+			  <td data-ng-if="!game.handicap">
+				
+			  </td>
+			  
+			  <!-- editable typeAddings (select-remote) -->
+			  <td data-ng-if="game.handicap">
+				<span editable-number="game.typeAddings" e-step="5" e-name="typeAddings" e-form="rowform">
+				  {{ game.typeAddings || 'empty' }}
+				</span>
+			  </td>
+			  <td data-ng-if="!game.handicap">
+				
+			  </td>
+			  <td style="white-space: nowrap">
+				<!-- form -->
+				<form editable-form name="rowform" onbeforesave="createGame($data, night, $index)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == game">
+				  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+					Save
+				  </button>
+				  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel();" class="btn btn-sm btn-default">
+					Cancel
+				  </button>
+				</form>
+				<div class="buttons" ng-show="!rowform.$visible">
+				  <button class="btn btn-primary btn-sm" ng-click="rowform.$show()">
+					<i class="glyphicon glyphicon-pencil"></i> edit
+				  </button>
+				  <button class="btn btn-danger btn-sm" ng-click="removeGame($index)">
+					<i class="glyphicon glyphicon-trash"></i> remove
+				  </button>
+				</div>  
+			  </td>
+			</tr>
+		</table>
+		<a class="btn pull-right" href data-ng-hide="night.isRunning" data-ng-keypress="addGameRow();" data-ng-click="addGameRow();" style="padding: 0;"><!-- href="/#!/participants/{{night._id}}/create" -->
+			<i class="glyphicon glyphicon-plus"></i>&nbsp;Add one
+		</a>
+
+	</section> <!-- End games -->
+	
+  
+	
+	<!-- Participants section -->
+	<section data-ng-controller="ParticipantsController" style="margin-bottom: 2em;">
+	  <h3>Participants</h3>
+	  
+	  <div data-ng-show="night.participants.length == 0">
+		  <p style="padding: 1em 0 1em 0;">There are no participants registered for this game night.</p>
+	  </div>
+	
+	  <div data-ng-hide="night.participants.length == 0">
+		<table class="table table-condensed">
+			<thead>
+			  <tr>
+				<td>Name</td>
+				<td></td>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr ng-repeat="participant in night.participants">
+				<td>{{participant.name}}</td>
+				<td>
+					<a data-ng-if="!night.isRunning" href class="btn btn-danger btn-sm" data-ng-keypress="removeParticipant(night, participant);" data-ng-click="removeParticipant(night, participant);">
+					  <i class="glyphicon glyphicon-trash"></i> remove
+					</a>
+				</td>
+			  </tr>
+			</tbody>
+		</table>
+	  </div>
+	  
+	  <!-- Add participant -->	  
+	  <div class="row">
+		<div class="col-md-offset-7">
+		</div>
+		<div class="col-md-4">
+			<input name="name" type="text" class="form-control" data-ng-model="participantName" id="name" placeholder="Name">
+		</div>
+		<div class="col-md-1">
+			<a class="btn" style="padding-left: 0;" href data-ng-hide="night.isRunning" data-ng-keypress="addParticipant(night, participantName);" data-ng-click="addParticipant(night, participantName)"><!-- href="/#!/participants/{{night._id}}/create" -->
+				<i class="glyphicon glyphicon-plus"></i>&nbsp;Add one
+			</a>
+		</div>
+	  </div>
+	  
+	  <!-- Generate Teams -->
+	  <div class="padding-row-x2" data-ng-controller="TeamsController" data-ng-hide="night.participants.length == 0 || !night.password">
+		<h3>Generate Teams</h3>
+		<div class="form-group" ng-class="{ 'has-error' : submitted && nightForm.password.$invalid }">
+		  <label for="perTeam" class="col-md-1 control-label" style="padding-left: 0; padding-top: .3em;">Per team</label>
+		  <div class="col-md-2" style="padding-left: 0;">
+			<select class="form-control" ng-change="createTeams(night.participants)" ng-model="night.participantsPerTeam" ng-options="o as o for o in participantsPerTeam">
+			</select>
+		  </div>
+		  <div class="col-md-offset-9"></div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12" style="padding-top: 2em;">
+				<div ng-show="night.participantsPerTeam > 1">
+					<label data-ng-if="night.teams.length == 0">No teams generated for this game night!</label>
+					<div ng-repeat="team in visualTeamList"><!-- Itterate a temp list -->
+						<span ng-repeat="participant in team.participantNames">{{participant}}{{$last ? '' : ', '}}</span>
+						<hr>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	  </div>
+  <h3>Night password</h3>
+  <div id="gameNightActionsAfterPasswordIsDefined" class="row margin-row" data-ng-if="night.password" >
+	  <div class="col-md-3" style="padding-left: 0">
+			<input name="password" type="password" class="form-control" data-ng-model="nightPassword" id="password" placeholder="Game night password" >
+			<div data-ng-if="nightPassword == night.password && (night.games.length == 0 || night.participants.length < 2)" style="color: red">
+				<p>You must create at least one game and add two participants</p>
+			</div>
+	  </div>
+	  <div data-ng-if="nightPassword == night.password && night.games.length > 0 && night.participants.length > 1" class="col-md-9">
+			<a data-ng-if="!night.isRunning" class="btn" href data-ng-keypress="remove(night);" data-ng-click="remove(night);">
+				<i class="glyphicon glyphicon-trash"></i>
+			</a>
+			<button ng-click="initializeNight()" class="btn start">Initialize game night!</button><!-- ng-class="{start:!night.isRunning, stop:night.isRunning}" -->
+	  </div>
+	</div>
+	  
+	</section> <!-- End participants -->
+	
+  </section>
+  
+</section>

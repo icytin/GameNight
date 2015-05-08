@@ -1,0 +1,13 @@
+<section data-ng-controller="NightsController" data-ng-init="find()">
+  <ul class="nights">
+    <li class="box" data-ng-if="night.stopped" data-ng-repeat="night in nights">
+      <span>Skapad av {{night.createdByUser.name}}</span>
+	  <span ng-if="night.isRunning" class="pull-right"><i class="glyphicon glyphicon-play bigger"></i></span>
+      <h2>
+        <a data-ng-href="#!/nights/{{night._id}}">{{night.created | date:'yyyy-mm-dd HH:mm'}}</a>
+      </h2>
+      <div>{{night.description}}</div>
+    </li>
+  </ul>
+  <h1 data-ng-hide="!nights || nights.length">No game nights yet. <br> Why don't you <a href="/#!/nights/create">Create One</a>?</h1>
+</section>
