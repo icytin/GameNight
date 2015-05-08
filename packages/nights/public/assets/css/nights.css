@@ -1,0 +1,111 @@
+h1 {
+	text-align: center
+}
+
+.error-text {
+	color: red;
+	font-weight: bold;
+}
+
+.nights {
+	list-style: none;
+}
+
+.navbar-inverse {
+	background-color: transparent!important;
+	border: none!important;
+}
+
+.btn.start {
+	color: #fff;
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+	box-shadow: 1px 3px 3px #adadad;
+}
+
+.btn.stop {
+	color: #fff;
+	background-color: #d2322d;
+	border-color: #ac2925;
+	box-shadow: 1px 3px 3px #adadad;
+}
+
+.padding-row
+{
+	padding: 1em 0 1em 0;
+}
+
+.padding-row-x2
+{
+	padding: 2em 0 2em 0;
+}
+
+.margin-row
+{
+	margin: 1em 0 1em 0;
+}
+
+.margin-row-x2
+{
+	margin: 2em 0 2em 0;
+}
+
+/********************************************************************************
+Loading ****/
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+    to {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+/********************************************************************************
+ul.default ****/
+ul.not-ready, ul.ready , ul.active {
+ counter-reset: li;
+	list-style: none;
+	font: 15px 'trebuchet MS', 'lucida sans';
+	margin-bottom: 1em;
+	border: 1px solid #ededed;
+	border-radius: .5em;
+	padding: 0 1em 1.1em 1.5em;
+	color: #000;
+}
+
+ul.not-ready {
+	background: #f2dede;
+	color: white;
+}
+
+ul.ready {
+	background: #dff0d8;
+	color: #000;
+}
+
+ul.active { 
+  background: #d9edf7;
+  color: #000;
+}
+ul.active:nth-child(odd) {
+  background: #dff0d8;
+  color: #000;
+}
+
+ul.not-ready:hover, ul.active:hover {
+	border: 1px solid #1B1C1C;
+	cursor: pointer;
+}

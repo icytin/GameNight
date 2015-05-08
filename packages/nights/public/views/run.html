@@ -1,0 +1,103 @@
+<section data-ng-controller="NightRunController" data-ng-init="findOne();">
+ 
+	 <h2>
+		Started&nbsp;<span am-time-ago="night.started"></span><img src="http://icons.iconarchive.com/icons/hamzasaleem/stock-style-3/72/Game-Center-icon.png">
+	 </h2>
+	<div data-ng-if="!resultsMode">
+		<ul data-ng-repeat="team in teams" class="active">
+			<li data-ng-model="team" data-ng-click="enterResultsMode(team)">
+				<h3>Team&nbsp;{{$index + 1}}</h3>
+				<span data-ng-repeat="participant in team.participants">
+					{{ participant.name }}{{$last ? '' : ', '}}
+				</span>
+			</li>
+		</ul>
+	</div>
+	
+	<section data-ng-if="resultsMode" >
+	
+		<h3>
+			Results for
+			<span data-ng-repeat="participant in currentSelectedTeam.participants">
+				{{ participant.name }}{{$last ? '' : ', '}}
+			</span>
+		</h3>
+			
+		<form role="form" class="padding-row">
+			<div class="form-group">
+				<label for="teamPassword" class="control-label">Team Password</label><br />
+				<input name="teamPassword" type="password" class="form-control" style="width: 30%" data-ng-model="teamPassword" id="teamPassword" placeholder="My team password" required>
+			</div>
+		</form>
+		
+		<div ng-show="teamPassword === currentSelectedTeam.password">
+			<h3>Game results</h3>
+			
+			<table class="table table-condensed table-striped">
+				<thead>
+					<tr>
+						<td>Game</td>
+						<td>Handicap</td>
+						<td>Best result</td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="gameTeam in GameTeamsHolder.gameTeams">
+					<td>{{GameTeamsHolder.games[$index].title}} {{GameTeamsHolder.game}}</td>
+					<td ng-show="GameTeamsHolder.games[$index].handicap">
+						<span editable-number="gameTeam.handicap" e-step="1" e-name="handicap" e-form="rowform">
+							{{ gameTeam.handicap || 0 }}
+						</span>
+					</td>
+				  <td ng-show="!GameTeamsHolder.games[$index].handicap">
+				  &nbsp;
+				  </td>
+					<td data-ng-if="GameTeamsHolder.games[$index].type !== 'Time'">
+						<span editable-number="gameTeam.highestScore" e-step="{{GameTeamsHolder.games[$index].typeAddings}}" e-name="highestScore" e-form="rowform">
+							{{ gameTeam.highestScore || '-' }}
+						</span>
+						<span ng-show="numberFormatError" class="warning">Must be number</span>
+					</td>
+					<td data-ng-if="GameTeamsHolder.games[$index].type === 'Time'">
+						<span editable-text="gameTeam.highestScore" e-name="highestScore" e-form="rowform" ng-pattern="timeFormat">
+							{{ gameTeam.highestScore || '-' }}
+						</span>
+						<span ng-show="timeFormatError" class="warning">Format mm:ss or mm:ss:FFF</span>
+					</td>
+					<td>
+						<form editable-form name="rowform" onbeforesave="updateGameTeam($data, gameTeam, $index)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == gameTeam">
+							<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
+							Save
+							</button>
+							<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel();" class="btn btn-sm btn-default">
+							Cancel
+							</button>
+						</form>
+						<div class="buttons" ng-show="!rowform.$visible">
+							<a href class="btn btn-primary btn-sm" ng-click="rowform.$show()">
+								<i class="glyphicon glyphicon-edit"></i> update
+							</a>
+						</div>
+					</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>
+		
+		<button ng-click="leaveResults()" class="btn btn-danger"><i class="glyphicon glyphicon-arrow-left"></i> Back!</button>
+				
+	</section>
+	
+	<!-- Admin passord section -->
+	<section id="gameNightActionsAfterPasswordIsDefined" class="row margin-row" style="min-height: 20px;" data-ng-if="night.password" >
+	  <div class="col-md-3" style="padding-left: 0">
+			<input name="password" type="password" class="form-control" data-ng-model="nightPassword" id="password" placeholder="Game night password" >
+	  </div>
+	  <div data-ng-if="nightPassword == night.password" class="col-md-9">
+			<button ng-click="finishGameNight()" class="btn btn-danger"><i class="glyphicon glyphicon-off"></i>&nbsp;Finish game night!</button>
+	  </div>
+	</section>
+	
+</section>

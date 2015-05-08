@@ -1,0 +1,68 @@
+<section data-ng-controller="NightInitController" data-ng-init="findOne();">
+
+	<h2>{{title}}</h2>
+	<span>Created {{nightMock.created | date:'yyyy-MM-dd HH:mm'}}</span>
+	<!--<section id="gameNightActionsAfterPasswordIsDefined" class="row margin-row" data-ng-if="nightMock.password" >
+	  <div class="col-md-3" style="padding-left: 0">
+			<input name="password" type="password" class="form-control" data-ng-model="nightPassword" id="password" placeholder="Game night password" >
+	  </div>
+	  <div data-ng-if="nightPassword == nightMock.password" class="col-md-9" style="padding-top: .5em;">
+			<b><i class="glyphicon glyphicon-star"></i>&nbsp;Add some super user actions here!</b>
+	  </div>
+	</section>-->
+	
+	<section id="teamListSection" class="padding-row-x2">
+		<div data-ng-if="editMode">
+			<h3>
+        Set handicap for
+        <span data-ng-repeat="participant in teamBelow.team.participants">
+          {{ participant.name }}{{$last ? '' : ', '}}
+        </span>
+      </h3>
+      
+			<form name="teamGameForm" editable-form class="form-horizontal col-md-6" role="form" data-ng-init="loadGameForm()" data-ng-submit="createHandicapForTeam(teamGameForm.$valid, teamGameForm)" novalidate>
+				<div data-ng-repeat="game in nightMock.games">
+					<div class="form-group" ng-class="{ 'has-error' : submitted && teamGameForm.enteredHandicapFor.{{game._id}}.$invalid }">
+						<label mean-token="'create-handicap'" for="enteredHandicapFor.{{game._id}}" class="col-md-3 control-label">{{game.title}}</label>
+						<div ng-show="game.handicap" class="col-md-9">
+							<input name="game.enteredHandicap" type="text" class="form-control" data-ng-model="game.enteredHandicap" id="game.enteredHandicap" placeholder="Handicap" ng-pattern="onlyNumbers">
+						</div>
+            <div ng-show="!game.handicap" class="col-md-9">
+							<input name="game.enteredHandicap" type="text" class="form-control" data-ng-model="game.enteredHandicap" id="game.enteredHandicap" placeholder="Handicap" ng-pattern="onlyNumbers" readonly="readonly" value="0">
+						</div>
+					</div>
+				</div>
+        
+        <h3>Your team settings</h3>
+				<div class="form-group" ng-class="{ 'has-error' : submitted && teamGameForm.password.$invalid }">
+					<label mean-token="'create-handicap'" for="teamPassword" class="col-md-3 control-label">Team Password</label>
+					<div class="col-md-9">
+						<input name="teamPassword" type="password" class="form-control" data-ng-model="teamPassword" id="teamPassword" placeholder="My team password" required>
+						<div ng-show="submitted && teamGameForm.teamPassword.$invalid" class="help-block">
+							<p ng-show="teamGameForm.teamPassword.$error.required">Team Password is required</p>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-offset-3 col-md-9">
+						<div style="padding: .3em 0 .3em 0;">
+							<span class="error-text" ng-show="invalidHandicap">You must spend exactly {{invalidHandicap}} handicap points.</span>
+							<span class="error-text" ng-show="invalidPointsPerGame">You have entered {{invalidPointsPerGame}}. Maximum 10 points per game.</span>
+						</div>
+						<button data-ng-click="submit()" class="btn start">Save</button>
+					</div>
+				</div>
+			</form>
+
+		</div> <!-- END edit-mode -->
+		<ul data-ng-if="!editMode" data-ng-repeat="team in teams" ng-class="team.password ? 'ready' : 'not-ready'">
+			<li data-ng-model="team" data-ng-click="enterEditMode(teams, $index)">
+				<h3>Team&nbsp;{{$index + 1}}</h3>
+				<span data-ng-repeat="participant in team.participants">
+				{{ participant.name }}{{$last ? '' : ', '}}
+				</span>
+			</li>
+		</ul>
+	</section>
+  
+</section>

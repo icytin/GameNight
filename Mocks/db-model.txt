@@ -1,0 +1,36 @@
+Gamenight
+  - Games[]
+  - Deltagare[]
+  - Teams[]
+  - Lösenord
+  - Startad
+  - Stoppad
+
+Team
+  - TeamId
+  - GameNightId
+  - Deltagare[]
+
+Game
+  - Namn
+  - Typ
+  - TypPåslag
+  - Handikapp
+
+Deltagare
+  - Namn
+  - DeltagitAntalGgr
+
+Resultat
+  - Antal pinnar
+  - Resultat (Poäng/Tid)
+  - GameId
+  - GameNightId
+
+
+
+alla ska default ha handikapp på, men man måste kunna slå av det
+[20:48:43] Andreas Öman: när det är på, och man valt tid, så får man ange hur mycket tid som ska läggas på per handikapp
+[20:48:48] Andreas Öman: eller poäng om man valt det
+[20:48:55] Andreas Öman: poäng så ska det ju dras av
+[20:49:19] Andreas Öman: ibland är det ju att lägga på tid, ibland att dra av... men det kanske man kan styra med + och -

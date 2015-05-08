@@ -1,0 +1,19 @@
+<section data-ng-controller="NightsController">
+  <form name="nightForm" class="form-horizontal col-md-6" role="form" data-ng-submit="create(nightForm.$valid)" novalidate>
+
+	<div class="form-group">
+		<label mean-token="'create-participants'" for="participants" class="col-md-3 control-label">Participants</label>
+		<div class="col-md-9">
+			<select id="participants" name="participants" size="10" mean-token="'create-participants'" required ng-required="true" multiple ng-multiple="true" ng-model="selectedUsers" ng-options="u.name+' (' + u.email + ')' for u in users"></select>
+			<div ng-show="submitted && nightForm.participants.$invalid" class="help-block">
+			  <p ng-show="nightForm.participants.$error.required">Participants are required</p>
+			</div>
+		</div>
+	</div>
+    <div class="form-group">
+      <div class="col-md-offset-3 col-md-9">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+</section>
