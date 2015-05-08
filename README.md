@@ -9,7 +9,7 @@ To getting started. Step inside your project folder and just follow the steps be
 * Run using grunt. If any error force it with # grunt -f
 
 ## Configs
-Port 3000 is defaul, to change db. Look in the config file: 
+Port 3000 is default, to change db. Look in the config file: 
 \gameNight\config\env
 
 ...
