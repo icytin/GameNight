@@ -1,3 +1,19 @@
+#Game Night
+
+This project is based on the beautiful MEAN. Se guide below.
+
+To getting started. Step inside your project folder and just follow the steps below:
+* npm install -g bower
+* npm install grunt-cli
+* npm install
+* Run using grunt. If any error force it with # grunt -f
+
+## Configs
+Port 3000 is defaul, to change db. Look in the config file: 
+\gameNight\config\env
+
+...
+
 # [![MEAN Logo](http://www.mean.io/img/logos/meanlogo.png)](http://mean.io/) MEAN Stack
 
 [![Build Status](https://travis-ci.org/linnovate/mean.png?branch=master)](https://travis-ci.org/linnovate/mean)
