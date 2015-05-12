@@ -1,8 +1,8 @@
 /*jslint plusplus: true */
 'use strict';
 
-angular.module('mean.nights').controller('NightResultsController', ['$scope', '$stateParams', '$location', 'Global', 'Nights', 'TeamFactory', 'Game_TeamFactory', 'Participants', 'Game_Teams', 'Results', 'moment', 'amMoment', 
-  function($scope, $stateParams, $location, Global, Nights, TeamFactory, Game_TeamFactory, Participants, Game_Teams, Results, moment, amMoment) {
+angular.module('mean.nights').controller('NightResultsController', ['$scope', '$stateParams', '$location', '$filter', 'Global', 'Nights', 'TeamFactory', 'Game_TeamFactory', 'Participants', 'Game_Teams', 'Results', 'moment', 'amMoment', 
+  function($scope, $stateParams, $location, $filter, Global, Nights, TeamFactory, Game_TeamFactory, Participants, Game_Teams, Results, moment, amMoment) {
   
     $scope.global = Global;
     
@@ -10,7 +10,10 @@ angular.module('mean.nights').controller('NightResultsController', ['$scope', '$
 		
 		$scope.result = {
 			games: [
-				/* Top List of teams for this game will be bounded to each game */
+				/* Team top list per game */
+			],
+			teams: [
+				/* Team top list */
 			]
 		};
 		
@@ -31,7 +34,8 @@ angular.module('mean.nights').controller('NightResultsController', ['$scope', '$
 					// Load the game teams
 					Game_TeamFactory.query(function(game_teams) {
 						
-						// For each game
+						// ===========================================
+						// Build result per game
 						for(var i = 0; i < night.games.length; i++) {
 						
 							var g = night.games[i],
@@ -45,6 +49,7 @@ angular.module('mean.nights').controller('NightResultsController', ['$scope', '$
 								var gt = angular.copy(game_teams[j]);
 								gt.highestScoreToTime = parseTime(gt.highestScore);
 								gt.participants = [];
+								gt.wins = 0;
 								
 								if(gt.gameId === gameId) {
 								
@@ -65,6 +70,30 @@ angular.module('mean.nights').controller('NightResultsController', ['$scope', '$
 							
 							// Add object
 							$scope.result.games.push(g);
+						}
+						
+						// ===========================================
+						// Build result per team
+						for(i = 0; i < $scope.result.games.length; i++) { // Games
+							var game = $scope.result.games[i];
+							
+							var filter = game.type === 'Points' ? '-highestScore' : 'highestScore' /* Okey, its "Time" */;
+							game.gameTeams = $filter('orderBy')(game.gameTeams, filter);
+							if(game.gameTeams.length > 0) {
+								var t = $filter('filter')($scope.result.teams, { teamId: game.gameTeams[0].teamId });
+								if(t.length === 0) { // team not added
+									var gameTeam = game.gameTeams[0];
+									gameTeam.wins++;
+									$scope.result.teams.push(gameTeam);
+								}
+								else { // Already added team
+									for(var m = 0; m < $scope.result.teams.length; m++) {
+										if(t.length === 1 && $scope.result.teams[m].teamId === t[0].teamId) {
+											$scope.result.teams[m].wins++;
+										}
+									}
+								}
+							}
 						}
 						
 					});
@@ -104,12 +133,5 @@ angular.module('mean.nights').controller('NightResultsController', ['$scope', '$
 			
 		return mins + ':' + secs + ':' + millis;
     };
-	
-	$scope.getTopScores = function(gameId) {
-		$scope.teams = [
-			{ test: gameId}
-		];
-	};
-	
   }
 ]);
