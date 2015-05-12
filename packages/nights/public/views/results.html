@@ -1,36 +1,48 @@
-<section data-ng-controller="NightResultsController" data-ng-init="loadGames();">
-<h2 style="text-shadow: 2px 2px 1px rgba(150, 150, 150, 1);">Game Night</h2>
+<section class="nightResult" data-ng-controller="NightResultsController" data-ng-init="loadGames();">
+<h2>Game Night</h2>
 <p>
 	<div><strong>Started:</strong> {{nightStarted | amDateFormat:'dddd, YYYY-MM-DD, hh:mm:ss a'}}</div>
 	<div><strong>Stopped:</strong> {{nightStopped | amDateFormat:'dddd, YYYY-MM-DD, hh:mm:ss a'}}</div>
 </p>
-<h2 style="text-shadow: 2px 2px 1px rgba(150, 150, 150, 1);">Results</h2>
+<h2>Team Results</h2>
+<div class="teamResult">
+	<div ng-repeat="team in result.teams | orderBy: '-wins'">
+		<div class="row result">
+			<div class="col-lg-4">
+				<strong>{{$index + 1}}.</strong>&nbsp;Team&nbsp;-&nbsp;<span ng-repeat="participant in team.participants">{{participant.name}}{{$last ? '' : ', '}}</span>
+			</div>
+			<div class="col-lg-4">
+				<div>Wins: {{team.wins}}</div>
+			</div>
+			<div ng-if="$first" class="col-lg-4">
+				<i class="glyphicon glyphicon-star result"></i>
+			</div>
+		</div>
+	</div>
+</div>
+<h2>Game Results</h2>
 <div ng-repeat="game in result.games">
 	
 	<h3>{{game.title}}</h3>
 	<h4>Score type: {{game.type}}</h4>
 	<div ng-if="game.type=='Points'" ng-repeat="gameTeam in game.gameTeams | orderBy: '-highestScore'">
-		<div class="row" style="margin-top: .5em; background: #ededed; border: .1em solid #9b9b9b; padding: .7em; border-radius: 25px 10px / 10px 25px; box-shadow: 3px 3px 3px black;">
+		<div class="row result">
 			<div class="col-lg-4"><label>Highest score: </label> {{gameTeam.highestScore}} </div>
 			<div class="col-lg-4"><label>Team: </label> <span ng-repeat="participant in gameTeam.participants">{{participant.name}}{{$last ? '' : ', '}}</span></div>
 			<div ng-if="$first" class="col-lg-4">
-				<!-- TODO: count the winner team some how -->
-				<i class="glyphicon glyphicon-star" style="  color: #E5C100; font-size: 1.8em;"></i>
+				<i class="glyphicon glyphicon-star result"></i>
 			</div>
 		</div>
 	</div>
 	<div ng-if="game.type=='Time'" ng-repeat="gameTeam in game.gameTeams | orderBy: 'highestScore'">
-		<div class="row" style="margin-top: .5em; background: #ededed; border: .1em solid #9b9b9b; padding: .7em; border-radius: 25px 10px / 10px 25px; box-shadow: 3px 3px 3px black;">
+		<div class="row result">
 			<div class="col-lg-4"><label>Highest score: </label> {{gameTeam.highestScoreToTime}} </div>
 			<div class="col-lg-4"><label>Team: </label> <span ng-repeat="participant in gameTeam.participants">{{participant.name}}{{$last ? '' : ', '}}</span></div>
 			<div ng-if="$first" class="col-lg-4">
-				<!-- TODO: count the winner team some how -->
-				<i class="glyphicon glyphicon-star" style="  color: #E5C100; font-size: 1.8em;"></i>
+				<i class="glyphicon glyphicon-star result"></i>
 			</div>
 		</div>
 	</div>
-
-	
 </div>
 	
 </section>
