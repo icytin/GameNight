@@ -2,7 +2,7 @@
 
 This project is based on the beautiful MEAN. Se guide below.
 
-A small application made to handle game nights. Add games with specific score types, participants and randomize the teams. After that teams may register their highscores for each game. When tha game night is finished a result view is presented.
+A small application made to handle game nights. Add games with specific score types, participants and randomize the teams. After that teams may register their highscores for each game. When the game night is finished a result view is presented.
 
 Get started by step inside your project folder and just follow the steps below:
 * npm install -g bower
