@@ -1,6 +1,6 @@
 #Game Night
 
-This project is based on the beautiful MEAN. Se guide below.
+This project is based on the beautiful MEAN stack. Se guide below.
 
 A small application made to handle game nights. Add games with specific score types, participants and randomize the teams. After that teams may register their highscores for each game. When the game night is finished a result view is presented.
 
