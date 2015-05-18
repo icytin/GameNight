@@ -1,5 +1,7 @@
 #Game Night
 
+Small application made to handle game nights. Add games with specific score types, participants and randomize the teams. After that teams may register their highscores for each game. When tha game night is finished a result view is presented.
+
 This project is based on the beautiful MEAN. Se guide below.
 
 To getting started. Step inside your project folder and just follow the steps below:
